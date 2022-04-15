@@ -4,3 +4,5 @@ WINDOW_TITLE = "Air Hockey"
 TARGET_FPS = 60
 
 ASSETS_FOLDER = "assets/"
+
+SERVER_ADDRES = ('127.0.0.1', 12000)

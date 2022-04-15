@@ -1,4 +1,6 @@
 import pygame
+import socket
+import time
 
 import config
 
@@ -17,6 +19,8 @@ class App:
 
         self.clock = pygame.time.Clock()
 
+        self.connect_to_server();
+
     def loop(self):
         while not self.quit:
             self.clock.tick(config.TARGET_FPS)
@@ -27,3 +31,20 @@ class App:
                 # draw
                 pygame.display.update()
         pygame.quit()
+    
+    def connect_to_server(self):
+        for pings in range(10):
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            client_socket.settimeout(1.0)
+            message = b'test'
+            addr = config.SERVER_ADDRES
+
+            start = time.time()
+            client_socket.sendto(message, addr)
+            try:
+                data, server = client_socket.recvfrom(1024)
+                end = time.time()
+                elapsed = end - start
+                print(f'{data} {pings} {elapsed}')
+            except socket.timeout:
+                print('REQUEST TIMED OUT')
