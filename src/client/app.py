@@ -1,6 +1,5 @@
 import pygame
 import socket
-import time
 
 import config
 from game import Game
@@ -8,7 +7,7 @@ from game import Game
 
 class App:
 
-    def __init__(self):
+    def __init__(self, connection_handler):
         self.quit = False
 
         pygame.init()
@@ -20,6 +19,7 @@ class App:
 
         self.clock = pygame.time.Clock()
 
+        self.connection_handler = connection_handler
         self.game = Game()
 
     def loop(self):
@@ -33,22 +33,5 @@ class App:
             # TODO get state from server and pass to update, then redraw
             self.game.update()
             self.game.draw()
-                pygame.display.update()
+            pygame.display.update()
         pygame.quit()
-    
-    def connect_to_server(self):
-        for pings in range(10):
-            client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            client_socket.settimeout(1.0)
-            message = b'test'
-            addr = config.SERVER_ADDRES
-
-            start = time.time()
-            client_socket.sendto(message, addr)
-            try:
-                data, server = client_socket.recvfrom(1024)
-                end = time.time()
-                elapsed = end - start
-                print(f'{data} {pings} {elapsed}')
-            except socket.timeout:
-                print('REQUEST TIMED OUT')
