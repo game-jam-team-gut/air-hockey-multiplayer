@@ -3,6 +3,7 @@ import socket
 import time
 
 import config
+from game import Game
 
 
 class App:
@@ -19,7 +20,7 @@ class App:
 
         self.clock = pygame.time.Clock()
 
-        self.connect_to_server();
+        self.game = Game()
 
     def loop(self):
         while not self.quit:
@@ -27,8 +28,11 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.quit = True
-                # update
-                # draw
+            # TODO recieve input
+            # TODO send to server
+            # TODO get state from server and pass to update, then redraw
+            self.game.update()
+            self.game.draw()
                 pygame.display.update()
         pygame.quit()
     
