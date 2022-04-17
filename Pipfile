@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
-client = "python src/client/client.py"
-server = "python src/server/server.py"
+client = "python src/client_.py"
+server = "python src/server_.py"
 
 [packages]
 pygame = "*"

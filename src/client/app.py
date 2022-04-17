@@ -1,7 +1,7 @@
 import pygame
 
-import config
-from game import Game
+import client.config as c
+from client.game import Game
 
 
 class App:
@@ -13,8 +13,8 @@ class App:
         pygame.font.init()
 
         self.window = pygame.display.set_mode(
-            (int(config.WINDOW_WIDTH), int(config.WINDOW_HEIGHT)))
-        pygame.display.set_caption(config.WINDOW_TITLE)
+            (int(c.WINDOW_WIDTH), int(c.WINDOW_HEIGHT)))
+        pygame.display.set_caption(c.WINDOW_TITLE)
 
         self.clock = pygame.time.Clock()
 
@@ -23,7 +23,7 @@ class App:
 
     def loop(self):
         while not self.quit:
-            self.clock.tick(config.TARGET_FPS)
+            self.clock.tick(c.TARGET_FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.quit = True

@@ -1,6 +1,6 @@
 import socket
 
-import config
+import client.config as c
 
 
 class ConnectionHandler:
@@ -8,14 +8,14 @@ class ConnectionHandler:
         self.server_address = server_address
         self.server_port = server_port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.settimeout(config.REQUEST_TIMEOUT)
+        self.socket.settimeout(c.REQUEST_TIMEOUT)
 
     def send_message(self, message):
         self.socket.sendto(message.encode(), (self.server_address, self.server_port))
 
     def receive_message_from_server(self):
         try:
-            data, server = self.socket.recvfrom(config.PACKET_SIZE)
+            data, server = self.socket.recvfrom(c.PACKET_SIZE)
             return data.decode()
         except socket.timeout:
             print('Error: request timed out!')

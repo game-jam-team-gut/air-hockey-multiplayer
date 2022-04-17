@@ -1,6 +1,7 @@
 import asyncio
 
-import config
+import server.config as c
+import shared.config
 
 
 class EchoServerProtocol:
@@ -19,11 +20,11 @@ class EchoServerProtocol:
 
 
 def main():
-    print("Starting UDP server on %s:%d" % config.ADDRESS)
+    print("Starting UDP server on %s:%d" % shared.config.SERVER)
 
     loop = asyncio.get_event_loop_policy().get_event_loop()
 
-    listen = loop.create_datagram_endpoint(lambda: EchoServerProtocol(), local_addr=config.ADDRESS)
+    listen = loop.create_datagram_endpoint(lambda: EchoServerProtocol(), local_addr=shared.config.SERVER)
     transport, protocol = loop.run_until_complete(listen)
 
     try:

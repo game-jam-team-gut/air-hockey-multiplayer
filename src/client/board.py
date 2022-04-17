@@ -1,4 +1,4 @@
-import config
+import client.config as c
 
 
 class Board:
@@ -6,4 +6,4 @@ class Board:
         self.img = img
 
     def draw(self, window):
-        window.blit(self.img, (config.WINDOW_WIDTH / 2 - self.img.get_width() / 2, 0))
+        window.blit(self.img, (c.WINDOW_WIDTH / 2 - self.img.get_width() / 2, 0))
