@@ -1,6 +1,4 @@
 import pygame
-import socket
-import load_assets
 
 import config
 from game import Game
@@ -33,6 +31,6 @@ class App:
             # TODO send to server
             # TODO get state from server and pass to update, then redraw
             self.game.update()
-            self.game.draw()
+            self.game.draw(self.window)
             pygame.display.update()
         pygame.quit()
