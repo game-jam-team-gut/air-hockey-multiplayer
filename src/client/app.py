@@ -1,5 +1,6 @@
 import pygame
 import socket
+import load_assets
 
 import config
 from game import Game
@@ -28,7 +29,7 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.quit = True
-            # TODO recieve input
+            # TODO receive input
             # TODO send to server
             # TODO get state from server and pass to update, then redraw
             self.game.update()

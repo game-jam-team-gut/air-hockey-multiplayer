@@ -4,8 +4,8 @@ import config
 
 
 def main():
-    connection_handl = ConnectionHandler(config.SERVER_ADDRESS, config.SERVER_PORT)
-    app = App(connection_handl)
+    connection_handler = ConnectionHandler(config.SERVER_ADDRESS, config.SERVER_PORT)
+    app = App(connection_handler)
     app.loop()
 
 

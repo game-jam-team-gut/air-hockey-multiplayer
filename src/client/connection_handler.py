@@ -2,6 +2,7 @@ import socket
 
 import config
 
+
 class ConnectionHandler:
     def __init__(self, server_address, server_port) -> None:
         self.server_address = server_address
@@ -11,8 +12,8 @@ class ConnectionHandler:
 
     def send_message(self, message):
         self.socket.sendto(message.encode(), (self.server_address, self.server_port))
-    
-    def recieve_message_from_server(self):
+
+    def receive_message_from_server(self):
         try:
             data, server = self.socket.recvfrom(config.PACKET_SIZE)
             return data.decode()

@@ -2,16 +2,21 @@ import asyncio
 
 import config
 
+
 class EchoServerProtocol:
+    def __init__(self):
+        self.transport = None
+
     def connection_made(self, transport):
         self.transport = transport
         print(transport)
 
-    def datagram_received(self, data, addr):
+    def datagram_received(self, data, address):
         message = data.decode()
-        print('Received %r from %s' % (message, addr))
-        print('Send %r to %s' % (message, addr))
-        self.transport.sendto(data, addr)
+        print('Received %r from %s' % (message, address))
+        print('Send %r to %s' % (message, address))
+        self.transport.sendto(data, address)
+
 
 def main():
     print("Starting UDP server on %s:%d" % config.ADDRESS)
