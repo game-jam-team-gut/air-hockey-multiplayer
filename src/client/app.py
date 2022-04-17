@@ -2,13 +2,12 @@ import pygame
 
 import client.config as c
 from client.game import Game
+from client.input import Input
 
 
 class App:
 
     def __init__(self, connection_handler):
-        self.quit = False
-
         pygame.init()
         pygame.font.init()
 
@@ -20,17 +19,17 @@ class App:
 
         self.connection_handler = connection_handler
         self.game = Game()
+        self.input = Input()
 
     def loop(self):
-        while not self.quit:
+        while not self.input.quit:
             self.clock.tick(c.TARGET_FPS)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.quit = True
+            self.input.handle()
             # TODO receive input
             # TODO send to server
             # TODO get state from server and pass to update, then redraw
-            self.game.update()
+            self.game.update(self.input)
             self.game.draw(self.window)
             pygame.display.update()
         pygame.quit()
+

@@ -1,9 +1,10 @@
+import pygame
+
 import client.config as c
+from client.game_object import GameObject
 
-
-class Board:
+class Board(pygame.sprite.Sprite, GameObject):
     def __init__(self, img):
-        self.img = img
-
-    def draw(self, window):
-        window.blit(self.img, (c.WINDOW_WIDTH / 2 - self.img.get_width() / 2, 0))
+        super().__init__()
+        self.image = img
+        self.rect = self.image.get_rect(center = (c.WINDOW_WIDTH / 2, c.WINDOW_HEIGHT / 2))
