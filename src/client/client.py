@@ -1,6 +1,6 @@
+import config
 from app import App
 from connection_handler import ConnectionHandler
-import config
 
 
 def main():

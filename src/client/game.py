@@ -1,30 +1,18 @@
-from asset_loader import AssetLoader
+import config
+from asset_manager import AssetManager
 from board import Board
 from striker import Striker
-import pygame
-import config
-
-STRIKERS_NUMBER = 2
-
-
-# no idea where to put these two functions
-def scale_img(img, scale):
-    return pygame.transform.smoothscale(img, (img.get_size()[0] * scale, img.get_size()[1] * scale))
-
-
-def scale_imgs(imgs, scale):
-    scaled_imgs = []
-    for img in imgs:
-        scaled_imgs.append(pygame.transform.smoothscale(img, (img.get_size()[0] * scale, img.get_size()[1] * scale)))
-    return scaled_imgs
 
 
 class Game:
     def __init__(self) -> None:
-        self.asset_loader = AssetLoader()
-        self.board = Board(scale_img(self.asset_loader.board_img, config.SCALE))
-        self.strikers[0] = Striker(scale_img(self.asset_loader.striker_img, config.SCALE), config.WINDOW_WIDTH/2, 50)
-        self.strikers[1] = Striker(scale_img(self.asset_loader.striker_img, config.SCALE), config.WINDOW_WIDTH/2, 800)
+        self.asset_manager = AssetManager()
+        self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img))
+        self.strikers = []
+        self.strikers.append(Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
+                                     self.asset_manager.striker_img.get_height() / 2))
+        self.strikers.append(Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
+                                     config.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height()))
 
     def draw(self, window):
         window.fill((255, 255, 255))
@@ -34,7 +22,3 @@ class Game:
 
     def update(self):
         pass
-
-    asset_loader = None
-    board = None
-    strikers = [None for _ in range(STRIKERS_NUMBER)]

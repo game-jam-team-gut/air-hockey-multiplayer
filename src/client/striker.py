@@ -2,17 +2,10 @@ import config
 
 
 class Striker:
-    def __init__(self, img, x, y):
+    def __init__(self, img, y):
         self.img = img
-        self.x = x
+        self.x = config.WINDOW_WIDTH / 2 - self.img.get_width() / 2
         self.y = y
-        self.size_x, self.size_y = self.img.get_size()
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
-
-    img = None
-    x = None
-    y = None
-    size_x = None
-    size_y = None
