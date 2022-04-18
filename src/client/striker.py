@@ -10,4 +10,4 @@ class Striker(pygame.sprite.Sprite, GameObject):
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.center = (c.WINDOW_WIDTH / 2, y)
-        self.dragged = False
+        self.is_dragged = False

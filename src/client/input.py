@@ -1,5 +1,7 @@
 import pygame
 
+LEFT = 1
+
 
 class Input:
     def __init__(self) -> None:
@@ -12,8 +14,8 @@ class Input:
                 case pygame.QUIT:
                     self.quit = True
                 case pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
+                    if event.button == LEFT:
                         self.dragging = True
                 case pygame.MOUSEBUTTONUP:
-                    if event.button == 1:
+                    if event.button == LEFT:
                         self.dragging = False

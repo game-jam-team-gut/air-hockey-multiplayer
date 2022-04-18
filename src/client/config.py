@@ -6,5 +6,6 @@ TARGET_FPS = 60
 ASSETS_FOLDER = "src/client/assets/"
 REQUEST_TIMEOUT = 1.0
 
-SCALE = WINDOW_HEIGHT/1595
+# TODO remove magic number 1595 (stands for board.png height)
+SCALE = WINDOW_HEIGHT / 1595
 STRIKERS_NUMBER = 2
