@@ -8,7 +8,7 @@ from shared.player import Player
 class Server:
     def __init__(self) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind((shared.config.SERVER))
+        self.socket.bind(('0.0.0.0', shared.config.SERVER_PORT))
         self.players = [Player(), Player()]
         self.connected_addresses = []
     
