@@ -2,13 +2,12 @@ import pygame
 from _thread import *
 
 import client.config as c
-from client.game import Game
-from client.input import Input
-from shared.player import Player
+from client.screens.game_screen import GameScreen
+from client.screens.menu_screen import MenuScreen
 
 
 class App:
-    def __init__(self, connection_handler):
+    def __init__(self):
         pygame.init()
         pygame.font.init()
 
@@ -16,30 +15,15 @@ class App:
         pygame.display.set_caption(c.WINDOW_TITLE)
 
         self.clock = pygame.time.Clock()
-
-        self.connection_handler = connection_handler
-        self.game = Game()
-        self.player_input = Input()
-        start_new_thread(self.synchronise_with_server_loop, ())
+        self.current_screen = MenuScreen(self.window, self.change_screen)
 
     def loop(self):
-        while not self.player_input.quit:
-            self.clock.tick(c.TARGET_FPS)
-
-            self.player_input.handle()
-            self.game.update(self.player_input)
-
-            self.game.draw(self.window)
+        while not self.current_screen.input.quit:
+            delta_time = self.clock.tick(c.TARGET_FPS) / 1000.0
+            self.current_screen.update(delta_time)
             pygame.display.update()
-        self.connection_handler.disconnect()
+        self.current_screen.quit()
         pygame.quit()
     
-    def synchronise_with_server_loop(self):
-        while not self.player_input.quit:
-            x, y = self.game.player_striker.get_position()
-            self.connection_handler.send_message(Player(x, y))
-            enemy = self.connection_handler.receive_message_from_server()
-            if enemy != None:
-                self.game.enemy_striker.set_position((enemy.x, enemy.y))
-            else:
-                print("Cannot get data from server!")
+    def change_screen(self, new_screen):
+        self.current_screen = new_screen
