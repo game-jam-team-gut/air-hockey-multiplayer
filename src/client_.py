@@ -6,6 +6,7 @@ from client.connection_handler import ConnectionHandler
 
 def main():
     connection_handler = ConnectionHandler(shared.config.SERVER_ADDRESS, shared.config.SERVER_PORT)
+    connection_handler.connect()
     app = App(connection_handler)
     app.loop()
 
