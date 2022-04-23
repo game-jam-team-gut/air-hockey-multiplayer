@@ -1,4 +1,5 @@
 import pygame
+from _thread import *
 
 import client.config as c
 from client.game import Game
@@ -19,6 +20,7 @@ class App:
         self.connection_handler = connection_handler
         self.game = Game()
         self.player_input = Input()
+        start_new_thread(self.synchronise_with_server_loop, ())
 
     def loop(self):
         while not self.player_input.quit:
@@ -27,18 +29,17 @@ class App:
             self.player_input.handle()
             self.game.update(self.player_input)
 
-            self.synchronise_with_server()
-
             self.game.draw(self.window)
             pygame.display.update()
         self.connection_handler.disconnect()
         pygame.quit()
     
-    def synchronise_with_server(self):
-        x, y = self.game.player_striker.get_position()
-        self.connection_handler.send_message(Player(x, y))
-        enemy = self.connection_handler.receive_message_from_server()
-        if enemy != None:
-            self.game.enemy_striker.set_position((enemy.x, enemy.y))
-        else:
-            print("Cannot get data from server!")
+    def synchronise_with_server_loop(self):
+        while not self.player_input.quit:
+            x, y = self.game.player_striker.get_position()
+            self.connection_handler.send_message(Player(x, y))
+            enemy = self.connection_handler.receive_message_from_server()
+            if enemy != None:
+                self.game.enemy_striker.set_position((enemy.x, enemy.y))
+            else:
+                print("Cannot get data from server!")
