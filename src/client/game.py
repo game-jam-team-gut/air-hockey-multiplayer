@@ -1,4 +1,5 @@
 import pygame
+from math import sqrt, atan2, degrees, pi
 
 import client.config as c
 from client.asset_manager import AssetManager
@@ -22,6 +23,15 @@ class Game:
 
         self.puck = Puck(self.asset_manager.scale_img(self.asset_manager.puck_img))
 
+    def check_puck_hit(self):
+        if pygame.sprite.collide_mask(self.player_striker, self.puck):
+            # TODO: remove 55, 55 magic numbers representing x, y of centre of scaled puck
+            col_x, col_y = pygame.sprite.collide_mask(self.player_striker, self.puck)
+            dx = col_x - 55
+            dy = col_y - 55
+            self.puck.speed = self.player_striker.speed
+            self.puck.col_angle_rads = atan2(dy, dx)
+
     def draw(self, window):
         window.fill(WHITE)
         group = pygame.sprite.RenderPlain()
@@ -33,12 +43,11 @@ class Game:
         pygame.display.flip()
 
     def update(self, player_input):
-        mouse_pos = pygame.mouse.get_pos()
-        if player_input.dragging:
-            if self.player_striker.is_dragged:
-                self.player_striker.set_position(mouse_pos)
-            elif self.player_striker.rect.collidepoint(mouse_pos):
-                self.player_striker.set_position(mouse_pos)
-                self.player_striker.is_dragged = True
-        else:
-            self.player_striker.is_dragged = False
+        old_pos = self.player_striker.get_position()
+        self.player_striker.update_pos(player_input)
+        new_pos = self.player_striker.get_position()
+        self.player_striker.speed = sqrt((old_pos[0] - new_pos[0])**2 + (old_pos[1] - new_pos[1])**2)
+
+        self.check_puck_hit()
+        self.puck.update_pos()
+        self.puck.slow_down()
