@@ -5,7 +5,7 @@ from client.game_object import GameObject
 
 
 class Striker(pygame.sprite.Sprite, GameObject):
-    def __init__(self, img, y):
+    def __init__(self, img, y, board_rect):
         super().__init__()
         self.image = img
         self.rect = self.image.get_rect()
@@ -13,14 +13,15 @@ class Striker(pygame.sprite.Sprite, GameObject):
         self.is_dragged = False
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = 0.0
+        self.board_rect = board_rect
 
     def update_pos(self, player_input):
-        mouse_pos = pygame.mouse.get_pos()
         if player_input.dragging:
-            if self.is_dragged:
-                self.set_position(mouse_pos)
-            elif self.rect.collidepoint(mouse_pos):
-                self.set_position(mouse_pos)
+            m_pos = pygame.mouse.get_pos()
+            m_rect = pygame.Rect(m_pos[0] - self.rect.w / 2, m_pos[1] - self.rect.h / 2, self.rect.w, self.rect.h)
+            if (self.is_dragged or self.rect.collidepoint(m_pos)) and self.board_rect.contains(m_rect):
+                self.set_position(m_pos)
+            if self.rect.collidepoint(m_pos):
                 self.is_dragged = True
         else:
             self.is_dragged = False

@@ -7,8 +7,6 @@ from client.board import Board
 from client.striker import Striker
 from client.puck import Puck
 
-WHITE = 255, 255, 255
-
 
 class Game:
     def __init__(self) -> None:
@@ -16,10 +14,12 @@ class Game:
         self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img))
 
         player_start_y = c.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height() / 2
-        self.player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), player_start_y)
+        self.player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
+                                      player_start_y, self.board.rect)
 
         enemy_start_y = self.asset_manager.striker_img.get_height() / 2
-        self.enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), enemy_start_y)
+        self.enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
+                                     enemy_start_y, self.board.rect)
 
         self.puck = Puck(self.asset_manager.scale_img(self.asset_manager.puck_img))
 
@@ -33,7 +33,7 @@ class Game:
             self.puck.col_angle_rads = atan2(dy, dx)
 
     def draw(self, window):
-        window.fill(WHITE)
+        window.fill((255, 255, 255))
         group = pygame.sprite.RenderPlain()
         group.add(self.board)
         group.add(self.player_striker)

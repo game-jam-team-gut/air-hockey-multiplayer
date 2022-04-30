@@ -12,7 +12,6 @@ class MenuScreen(Screen):
 
     def update(self, delta_time):
         self.input.handle()
-        # TODO remove magic numbers
         textobj = pygame.font.SysFont(None, 50).render("Main menu", 1, (255, 255, 255))
         textrect = textobj.get_rect()
         textrect.topleft = (20, 20)
