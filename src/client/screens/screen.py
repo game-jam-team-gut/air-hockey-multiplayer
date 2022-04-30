@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Screen(ABC):
     def __init__(self, window, change_screen) -> None:
         self.window = window

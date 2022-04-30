@@ -1,5 +1,5 @@
 import pygame
-from math import sqrt, atan2, degrees, pi
+from math import sqrt, atan2
 
 import client.config as c
 from client.asset_manager import AssetManager
@@ -23,13 +23,13 @@ class Game:
 
         self.puck = Puck(self.asset_manager.scale_img(self.asset_manager.puck_img))
 
-    def check_puck_hit(self):
-        if pygame.sprite.collide_mask(self.player_striker, self.puck):
+    def check_puck_hit(self, striker):
+        if pygame.sprite.collide_mask(striker, self.puck):
             # TODO: remove 55, 55 magic numbers representing x, y of centre of scaled puck
-            col_x, col_y = pygame.sprite.collide_mask(self.player_striker, self.puck)
+            col_x, col_y = pygame.sprite.collide_mask(striker, self.puck)
             dx = col_x - 55
             dy = col_y - 55
-            self.puck.speed = self.player_striker.speed
+            self.puck.speed = striker.speed
             self.puck.col_angle_rads = atan2(dy, dx)
 
     def draw(self, window):
@@ -48,6 +48,7 @@ class Game:
         new_pos = self.player_striker.get_position()
         self.player_striker.speed = sqrt((old_pos[0] - new_pos[0])**2 + (old_pos[1] - new_pos[1])**2)
 
-        self.check_puck_hit()
+        self.check_puck_hit(self.player_striker)
+        self.check_puck_hit(self.enemy_striker)
         self.puck.update_pos()
         self.puck.slow_down()

@@ -1,10 +1,11 @@
-import shared.config
+import shared.config as sc
+
 
 class Player:
-    def __init__(self, x = shared.config.PLAYER_START_POSITION_X, 
-                       y = shared.config.PLAYER_START_POSITION_Y) -> None:
-        self.x = x;
-        self.y = y;
-    
+    def __init__(self, x=sc.PLAYER_START_X, y=sc.PLAYER_START_Y, speed=0.0) -> None:
+        self.x = x
+        self.y = y
+        self.speed = speed
+
     def map_to_enemy_side(self):
-        return Player(shared.config.BOARD_WIDTH - self.x, shared.config.BOARD_HEIGHT - self.y)
+        return Player(sc.BOARD_WIDTH - self.x, sc.BOARD_HEIGHT - self.y, self.speed)
