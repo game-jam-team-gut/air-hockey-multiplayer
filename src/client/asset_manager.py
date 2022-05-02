@@ -2,6 +2,7 @@ import pygame
 from os import path
 
 import client.config as c
+import shared.config as sc
 
 DIGITS_NUMBER = 10
 
@@ -21,12 +22,12 @@ class AssetManager:
 
     @staticmethod
     def scale_img(img):
-        return pygame.transform.smoothscale(img, (img.get_width() * c.SCALE, img.get_height() * c.SCALE))
+        return pygame.transform.smoothscale(img, (img.get_width() * sc.SCALE, img.get_height() * sc.SCALE))
 
     @staticmethod
     def scale_imgs(imgs):
         scaled_imgs = []
         for img in imgs:
             scaled_imgs.append(
-                pygame.transform.smoothscale(img, (img.get_width() * c.SCALE, img.get_height() * c.SCALE)))
+                pygame.transform.smoothscale(img, (img.get_width() * sc.SCALE, img.get_height() * sc.SCALE)))
         return scaled_imgs

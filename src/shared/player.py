@@ -8,4 +8,4 @@ class Player:
         self.speed = speed
 
     def map_to_enemy_side(self):
-        return Player(sc.BOARD_WIDTH - self.x, sc.BOARD_HEIGHT - self.y, self.speed)
+        return Player(sc.WINDOW_WIDTH - self.x, sc.WINDOW_HEIGHT - self.y, self.speed)

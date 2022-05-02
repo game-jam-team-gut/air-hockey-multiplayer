@@ -22,7 +22,7 @@ class ConnectionHandler:
         self._send_message("disconnect")
         self.id = None
         print("Connected from server")
-    
+
     def _send_message(self, data):
         for _ in range(sc.PACKET_SEND_REPEAT_COUNT):
             try:
@@ -35,7 +35,6 @@ class ConnectionHandler:
             print("Error: not connected to server " + str(self.id))
             return
         self._send_message(data)
-
 
     def receive_message_from_server(self):
         if self.id is None:

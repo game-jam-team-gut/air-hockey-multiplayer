@@ -2,6 +2,7 @@ import pygame
 from _thread import *
 
 import client.config as c
+import shared.config as sc
 from client.screens.game_screen import GameScreen
 from client.screens.menu_screen import MenuScreen
 
@@ -11,7 +12,7 @@ class App:
         pygame.init()
         pygame.font.init()
 
-        self.window = pygame.display.set_mode((int(c.WINDOW_WIDTH), int(c.WINDOW_HEIGHT)))
+        self.window = pygame.display.set_mode((int(sc.WINDOW_WIDTH), int(sc.WINDOW_HEIGHT)))
         pygame.display.set_caption(c.WINDOW_TITLE)
 
         self.clock = pygame.time.Clock()

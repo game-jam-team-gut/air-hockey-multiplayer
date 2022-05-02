@@ -1,7 +1,7 @@
 import pygame
 from math import sqrt, atan2
 
-import client.config as c
+import shared.config as sc
 from client.asset_manager import AssetManager
 from client.board import Board
 from client.striker import Striker
@@ -13,7 +13,7 @@ class Game:
         self.asset_manager = AssetManager()
         self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img))
 
-        player_start_y = c.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height() / 2
+        player_start_y = sc.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height() / 2
         self.player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
                                       player_start_y, self.board.rect)
 
