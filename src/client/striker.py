@@ -1,4 +1,5 @@
 import pygame
+import math
 
 import shared.config as sc
 from client.game_object import GameObject
@@ -14,6 +15,10 @@ class Striker(pygame.sprite.Sprite, GameObject):
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = 0.0
         self.board_rect = board_rect
+
+    def update_speed(self, old_pos):
+        new_pos = self.get_position()
+        self.speed = math.sqrt((old_pos[0] - new_pos[0]) ** 2 + (old_pos[1] - new_pos[1]) ** 2)
 
     def change_by_mouse_position(self, m_pos):
         m_rect = pygame.Rect(m_pos[0] - self.rect.w / 2, m_pos[1] - self.rect.h / 2, self.rect.w, self.rect.h)
