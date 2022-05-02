@@ -34,6 +34,8 @@ class Server:
                 case "disconnect":
                     self.remove_connected(addr)
                     return
+                case "connect":
+                    return
 
             self.handle_client(addr, data)
             return
@@ -45,6 +47,9 @@ class Server:
     def handle_client(self, addr, data):
         client_id = self.connected_addresses.index(addr)
         self.players[client_id] = data
+        # TODO check for puck collision
+        # update puck
+        # send puck position
         if client_id == 1:
             self.socket.sendto(pickle.dumps(self.players[0].map_to_enemy_side()), addr)
         else:

@@ -14,23 +14,28 @@ class ConnectionHandler:
         self.id = None
 
     def connect(self):
-        self.socket.sendto(pickle.dumps("connect"), (self.server_address, self.server_port))
+        self._send_message("connect")
         self.id = pickle.loads(self.socket.recv(sc.PACKET_SIZE))
         print("Connected to server, my ID: " + str(self.id))
 
     def disconnect(self):
-        self.socket.sendto(pickle.dumps("disconnect"), (self.server_address, self.server_port))
+        self._send_message("disconnect")
         self.id = None
         print("Connected from server")
+    
+    def _send_message(self, data):
+        for _ in range(sc.PACKET_SEND_REPEAT_COUNT):
+            try:
+                self.socket.sendto(pickle.dumps(data), (self.server_address, self.server_port))
+            except socket.error as e:
+                print(e)
 
     def send_message(self, data):
         if self.id is None:
             print("Error: not connected to server " + str(self.id))
             return
-        try:
-            self.socket.sendto(pickle.dumps(data), (self.server_address, self.server_port))
-        except socket.error as e:
-            print(e)
+        self._send_message(data)
+
 
     def receive_message_from_server(self):
         if self.id is None:
