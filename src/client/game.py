@@ -38,8 +38,8 @@ class Game:
         self.player_striker.update_pos(player_input)
         self.player_striker.update_speed(old_pos)
 
-        self.puck.slow_down()
+        self.puck.update_pos()
+        self.puck.update_speed()
+        self.puck.check_wall_collision(self.board.rect)
         self.puck.check_striker_collision(self.player_striker)
         self.puck.check_striker_collision(self.enemy_striker)
-        self.puck.check_wall_collision(self.board.rect)
-        self.puck.update_pos()
