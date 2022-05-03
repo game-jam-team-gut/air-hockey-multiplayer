@@ -14,12 +14,10 @@ class Game:
         self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img))
 
         player_start_y = sc.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height() / 2
-        self.player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
-                                      player_start_y, self.board.rect)
+        self.player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), player_start_y)
 
         enemy_start_y = self.asset_manager.striker_img.get_height() / 2
-        self.enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
-                                     enemy_start_y, self.board.rect)
+        self.enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), enemy_start_y)
 
         self.puck = Puck(self.asset_manager.scale_img(self.asset_manager.puck_img))
 
@@ -35,7 +33,7 @@ class Game:
 
     def update(self, player_input):
         old_pos = self.player_striker.get_position()
-        self.player_striker.update_pos(player_input)
+        self.player_striker.update_pos(player_input, self.board.rect)
         self.player_striker.update_speed(old_pos)
 
         self.puck.update_pos()

@@ -1,4 +1,5 @@
 from _thread import *
+import pygame
 
 from client.screens.screen import Screen
 from client.game import Game
@@ -22,17 +23,47 @@ class GameScreen(Screen):
         self.game.update(self.input)
         self.game.draw(self.window)
 
+    def synchronise_all_uninterruptable(self, x, y):
+        p_x, p_y = self.game.puck.get_position()
+        self.connection_handler.send_message(Player(x, y, p_x, p_y, self.game.player_striker.sync_flag))
+        enemy = self.connection_handler.receive_message_from_server()
+        if enemy is not None:
+            self.game.enemy_striker.set_position((enemy.x, enemy.y))
+        else:
+            print("Cannot get data from server!")
+
+    def synchronise_all_interruptable(self, x, y):
+        p_x, p_y = self.game.puck.get_position()
+        self.connection_handler.send_message(Player(x, y, p_x, p_y))
+        enemy = self.connection_handler.receive_message_from_server()
+        if enemy is not None:
+            if enemy.sync_flag is not None:
+                self.game.player_striker.sync_flag = False
+            self.game.enemy_striker.set_position((enemy.x, enemy.y))
+        else:
+            print("Cannot get data from server!")
+
+    def synchronise_striker(self, x, y):
+        self.connection_handler.send_message(Player(x, y))
+        enemy = self.connection_handler.receive_message_from_server()
+        if enemy is not None:
+            if enemy.p_x is not None and enemy.p_y is not None:
+                self.game.puck.set_position((enemy.p_x, enemy.p_y))
+            if enemy.sync_flag is not None:
+                self.game.player_striker.sync_flag = False
+            self.game.enemy_striker.set_position((enemy.x, enemy.y))
+        else:
+            print("Cannot get data from server!")
+
     def synchronise_with_server_loop(self):
         while not self.input.quit:
             x, y = self.game.player_striker.get_position()
-            speed = self.game.player_striker.speed
-            self.connection_handler.send_message(Player(x, y, speed))
-            enemy = self.connection_handler.receive_message_from_server()
-            if enemy is not None:
-                self.game.enemy_striker.set_position((enemy.x, enemy.y))
-                self.game.enemy_striker.speed = enemy.speed
+            if pygame.sprite.collide_mask(self.game.player_striker, self.game.puck):
+                self.synchronise_all_uninterruptable(x, y)
+            elif self.game.player_striker.sync_flag:
+                self.synchronise_all_interruptable(x, y)
             else:
-                print("Cannot get data from server!")
+                self.synchronise_striker(x, y)
 
     def quit(self):
         self.connection_handler.disconnect()

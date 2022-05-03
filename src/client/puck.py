@@ -34,6 +34,7 @@ class Puck(pygame.sprite.Sprite, GameObject):
             dy = col_y - self.mask.get_rect().centery
             self.col_angle_rads = math.atan2(dy, dx)
             self.speed += striker.speed
+            striker.sync_flag = True
 
     def move_to_board(self, board_rect):
         if self.rect.x + self.rect.width > board_rect.x + board_rect.width:
