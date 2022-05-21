@@ -9,6 +9,7 @@ server = "python src/server_.py"
 
 [packages]
 pygame = "*"
+pymunk = "*"
 
 [dev-packages]
 
