@@ -14,23 +14,9 @@ class Game:
         self.space = pymunk.Space()
 
         self.asset_manager = AssetManager()
-        self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img))
-        walls = [
-            pymunk.Segment(self.space.static_body, (self.board.rect.x, self.board.rect.y),
-                           (self.board.rect.x + self.board.rect.width, self.board.rect.y), 1.0),
-            pymunk.Segment(self.space.static_body, (self.board.rect.x, self.board.rect.y + self.board.rect.height),
-                           (self.board.rect.x + self.board.rect.width, self.board.rect.y + self.board.rect.height),
-                           1.0),
-            pymunk.Segment(self.space.static_body, (self.board.rect.x, self.board.rect.y),
-                           (self.board.rect.x, self.board.rect.y + self.board.rect.height), 1.0),
-            pymunk.Segment(self.space.static_body, (self.board.rect.x + self.board.rect.width, self.board.rect.y),
-                           (self.board.rect.x + self.board.rect.width, self.board.rect.y + self.board.rect.height),
-                           1.0)
-        ]
-        for wall in walls:
-            wall.elasticity = 0.75
-            wall.group = 1
-        self.space.add(*walls)
+
+        self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img), self.space)
+        self.space.add(*self.board.walls)
 
         player_start_y = sc.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height() / 2
         self.player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), player_start_y)
@@ -61,6 +47,12 @@ class Game:
 
     def update(self, player_input):
         self.update_physics()
-        self.player_striker.update_pos(player_input, self.board.rect)
-        self.enemy_striker.update_body_pos()
-        self.puck.update_pos(self.player_striker, self.enemy_striker)
+
+        self.player_striker.check_player_input(player_input, self.board.rect)
+        self.player_striker.synchronise_pos()
+
+        self.enemy_striker.synchronise_pos()
+
+        self.puck.check_collision(self.player_striker)
+        self.puck.check_collision(self.enemy_striker)
+        self.puck.synchronise_pos()

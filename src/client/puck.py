@@ -1,29 +1,18 @@
 import pygame
-import pymunk
 from pymunk import Vec2d
 
 import shared.config as sc
-from client.game_object import GameObject
+from client.physics_game_object import PhysicsGameObject
+
+MASS = 1
+ELASTICITY = 1
 
 
-class Puck(pygame.sprite.Sprite, GameObject):
+class Puck(PhysicsGameObject):
     def __init__(self, img):
-        super().__init__()
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.center = (sc.WINDOW_WIDTH / 2, sc.WINDOW_HEIGHT / 2)
-        self.mask = pygame.mask.from_surface(self.image)
+        super().__init__(img, sc.WINDOW_WIDTH / 2, sc.WINDOW_HEIGHT / 2, MASS, ELASTICITY)
 
-        mass = 1
-        moment = pymunk.moment_for_circle(mass, 0, self.rect.width, (0, 0))
-        self.body = pymunk.Body(mass, moment)
-        self.body.position = self.rect.centerx, self.rect.centery
-        self.shape = pymunk.Circle(self.body, self.rect.width / 2, (0, 0))
-        self.shape.elasticity = 1
-
-    def update_pos(self, player_striker, enemy_striker):
-        if pygame.sprite.collide_mask(player_striker, self):
-            self.body.apply_impulse_at_local_point(Vec2d.unit() * -200, (0, 0))
-        if pygame.sprite.collide_mask(enemy_striker, self):
-            self.body.apply_impulse_at_local_point(Vec2d.unit() * 200, (0, 0))
-        self.rect.center = self.body.position.x, self.body.position.y
+    def check_collision(self, collider):
+        if pygame.sprite.collide_mask(collider, self):
+            self.body.apply_impulse_at_local_point(Vec2d.unit() * -5 * collider.velocity, (0, 0))
+            self.rect.center = self.body.position

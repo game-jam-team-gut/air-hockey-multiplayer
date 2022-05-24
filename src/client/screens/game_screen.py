@@ -24,6 +24,7 @@ class GameScreen(Screen):
         self.game.draw(self.window)
 
     def synchronise_all_uninterruptable(self, x, y):
+        self.game.player_striker.sync_flag = True
         p_x, p_y = self.game.puck.get_position()
         self.connection_handler.send_message(Player(x, y, p_x, p_y, self.game.player_striker.sync_flag))
         enemy = self.connection_handler.receive_message_from_server()

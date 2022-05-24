@@ -1,9 +1,10 @@
-class GameObject:
-    def __init__(self):
-        self.rect = None
+import pygame
 
-    def set_position(self, position):
-        self.rect.center = position
 
-    def get_position(self):
-        return self.rect.center
+class GameObject(pygame.sprite.Sprite):
+    def __init__(self, img, x, y):
+        super().__init__()
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.center = x, y
+        self.mask = pygame.mask.from_surface(self.image)
