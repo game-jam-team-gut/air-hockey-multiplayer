@@ -37,8 +37,9 @@ class Game:
         group.add(self.enemy_striker)
         group.add(self.puck)
         group.draw(window)
-        draw_options = pymunk.pygame_util.DrawOptions(window)
-        self.space.debug_draw(draw_options)
+        # debug body drawing
+        # draw_options = pymunk.pygame_util.DrawOptions(window)
+        # self.space.debug_draw(draw_options)
         pygame.display.flip()
 
     def update_physics(self):
@@ -54,5 +55,5 @@ class Game:
         self.enemy_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)
-        # TODO: synchronise puck position only when server set this player's id as primary_sync_player_id
-        self.puck.synchronise_pos()
+        if self.player_striker.is_primary_sync:
+            self.puck.synchronise_pos()

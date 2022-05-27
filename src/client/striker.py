@@ -14,7 +14,7 @@ class Striker(PhysicsGameObject):
         super().__init__(img, sc.WINDOW_WIDTH / 2, y, MASS, ELASTICITY)
         self.velocity = 0.0
         self.is_dragged = False
-        self.sync_flag = False
+        self.is_primary_sync = False
         self.body.body_type = pymunk.Body.KINEMATIC
 
     def position_change(self, old_pos):

@@ -1,6 +1,5 @@
 from _thread import *
 import pygame
-import pymunk
 
 from client.screens.screen import Screen
 from client.game import Game
@@ -35,12 +34,15 @@ class GameScreen(Screen):
 
     def receive_data(self):
         enemy = self.connection_handler.receive_message_from_server()
-        if enemy.p_x is not None and enemy.p_y is not None:
-            self.game.puck.set_position((enemy.p_x, enemy.p_y))
-        if enemy.p_velocity is not None:
-            self.game.puck.body.velocity = enemy.p_velocity
-        if enemy.x is not None and enemy.y is not None:
-            self.game.enemy_striker.set_position((enemy.x, enemy.y))
+        if enemy is not None:
+            if enemy.p_x is not None and enemy.p_y is not None:
+                self.game.puck.set_position((enemy.p_x, enemy.p_y))
+            if enemy.p_velocity is not None:
+                self.game.puck.body.velocity = enemy.p_velocity
+            if enemy.s_x is not None and enemy.s_y is not None:
+                self.game.enemy_striker.set_position((enemy.s_x, enemy.s_y))
+            if enemy.has_collided is not None:
+                self.game.player_striker.is_primary_sync = enemy.has_collided
 
     def synchronise_with_server_loop(self):
         while not self.input.quit:
