@@ -54,7 +54,5 @@ class Game:
         self.enemy_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)
-        """
-        self.puck.check_collision(self.enemy_striker)
-        """
+        # TODO: synchronise puck position only when server set this player's id as primary_sync_player_id
         self.puck.synchronise_pos()

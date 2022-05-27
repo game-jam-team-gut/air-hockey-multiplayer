@@ -27,20 +27,16 @@ class Server:
 
     def loop(self):
         data, addr = self.socket.recvfrom(shared.config.PACKET_SIZE)
-
         if addr in self.connected_addresses:  # already connected
             data = pickle.loads(data)
-
             match data:
                 case "disconnect":
                     self.remove_connected(addr)
                     return
                 case "connect":
                     return
-
             self.handle_client(addr, data)
             return
-
         match pickle.loads(data):
             case "connect":
                 self.accept_connection(addr)

@@ -1,5 +1,6 @@
 from _thread import *
 import pygame
+import pymunk
 
 from client.screens.screen import Screen
 from client.game import Game
@@ -23,19 +24,28 @@ class GameScreen(Screen):
         self.game.update(self.input)
         self.game.draw(self.window)
 
+    def send_data(self):
+        s_x, s_y = self.game.player_striker.get_position()
+        p_x, p_y = self.game.puck.get_position()
+        p_velocity = self.game.puck.body.velocity
+        has_collided = False
+        if pygame.sprite.collide_mask(self.game.player_striker, self.game.puck):
+            has_collided = True
+        self.connection_handler.send_message(Player(s_x, s_y, p_x, p_y, p_velocity, has_collided))
+
+    def receive_data(self):
+        enemy = self.connection_handler.receive_message_from_server()
+        if enemy.p_x is not None and enemy.p_y is not None:
+            self.game.puck.set_position((enemy.p_x, enemy.p_y))
+        if enemy.p_velocity is not None:
+            self.game.puck.body.velocity = enemy.p_velocity
+        if enemy.x is not None and enemy.y is not None:
+            self.game.enemy_striker.set_position((enemy.x, enemy.y))
+
     def synchronise_with_server_loop(self):
         while not self.input.quit:
-            x, y = self.game.player_striker.get_position()
-            p_x, p_y = self.game.puck.get_position()
-            has_collided = False
-            if pygame.sprite.collide_mask(self.game.player_striker, self.game.puck):
-                has_collided = True
-            self.connection_handler.send_message(Player(x, y, p_x, p_y, has_collided))
-            enemy = self.connection_handler.receive_message_from_server()
-            if enemy is not None:
-                if enemy.p_x is not None and enemy.p_y is not None:
-                    self.game.puck.set_position((enemy.p_x, enemy.p_y))
-                self.game.enemy_striker.set_position((enemy.x, enemy.y))
+            self.send_data()
+            self.receive_data()
 
     def quit(self):
         self.connection_handler.disconnect()
