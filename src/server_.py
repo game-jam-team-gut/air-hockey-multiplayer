@@ -12,6 +12,7 @@ class Server:
         self.socket.bind(('0.0.0.0', shared.config.SERVER_PORT))
         self.players = [Player(), Player()]
         self.connected_addresses = []
+        self.primary_sync_player_id = 1
 
     def accept_connection(self, addr):
         self.socket.sendto(pickle.dumps(len(self.connected_addresses)), addr)  # send ID to client
@@ -47,13 +48,12 @@ class Server:
     def handle_client(self, addr, data):
         client_id = self.connected_addresses.index(addr)
         self.players[client_id] = data
-        # TODO check for puck collision
-        # update puck
-        # send puck position
-        if client_id == 1:
-            self.socket.sendto(pickle.dumps(self.players[0].map_to_enemy_side()), addr)
+        if self.players[client_id - 1].has_collided:
+            self.primary_sync_player_id = client_id
+        if self.primary_sync_player_id == client_id:
+            self.socket.sendto(pickle.dumps(self.players[client_id - 1].primary_map_to_enemy_side()), addr)
         else:
-            self.socket.sendto(pickle.dumps(self.players[1].map_to_enemy_side()), addr)
+            self.socket.sendto(pickle.dumps(self.players[client_id - 1].secondary_map_to_enemy_side()), addr)
 
 
 if __name__ == "__main__":

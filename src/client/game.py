@@ -54,5 +54,7 @@ class Game:
         self.enemy_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)
+        """
         self.puck.check_collision(self.enemy_striker)
+        """
         self.puck.synchronise_pos()
