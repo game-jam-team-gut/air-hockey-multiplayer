@@ -66,7 +66,7 @@ class Game:
     def update(self, player_input):
         self.update_physics()
 
-        self.player_striker.check_player_input(player_input, self.board.rect)
+        self.player_striker.check_player_input(player_input, self.board.player_striker_movement_area)
         self.player_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)

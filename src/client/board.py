@@ -1,3 +1,4 @@
+import pygame
 import pymunk
 
 import shared.config as sc
@@ -20,3 +21,6 @@ class Board(GameObject):
         for wall in self.walls:
             wall.elasticity = 0.75
             wall.group = 1
+
+        self.player_striker_movement_area = pygame.Rect(self.rect.x, self.rect.y + self.rect.height / 2,
+                                                        self.rect.width, self.rect.height / 2)
