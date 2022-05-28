@@ -28,7 +28,7 @@ class GameScreen(Screen):
         while not self.input.quit:
             s_x, s_y = self.game.player_striker.get_position()
             p_x, p_y = self.game.puck.get_position()
-            p_velocity = self.game.puck.body.velocity
+            p_velocity = self.game.puck.get_velocity()
             has_collided = False
             if pygame.sprite.collide_mask(self.game.player_striker, self.game.puck):
                 has_collided = True
@@ -41,7 +41,7 @@ class GameScreen(Screen):
                 if enemy.p_x is not None and enemy.p_y is not None:
                     self.game.puck.set_position((enemy.p_x, enemy.p_y))
                 if enemy.p_velocity is not None:
-                    self.game.puck.body.velocity = enemy.p_velocity
+                    self.game.puck.set_velocity(enemy.p_velocity)
                 if enemy.s_x is not None and enemy.s_y is not None:
                     self.game.enemy_striker.set_position((enemy.s_x, enemy.s_y))
                 if enemy.has_collided is not None:

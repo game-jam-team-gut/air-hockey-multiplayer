@@ -11,7 +11,7 @@ ELASTICITY = 1
 
 class Striker(PhysicsGameObject):
     def __init__(self, img, y):
-        super().__init__(img, sc.WINDOW_WIDTH / 2, y, MASS, ELASTICITY)
+        super().__init__(img, sc.STRIKER_START_X, y, MASS, ELASTICITY)
         self.velocity = 0.0
         self.is_dragged = False
         self.is_primary_sync = False

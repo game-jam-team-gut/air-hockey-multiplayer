@@ -4,8 +4,8 @@ import shared.config as sc
 
 
 class Player:
-    def __init__(self, s_x=sc.PLAYER_START_X, s_y=sc.PLAYER_START_Y, p_x=sc.WINDOW_WIDTH / 2, p_y=sc.WINDOW_HEIGHT / 2,
-                 p_velocity=Vec2d(0.0, 0.0), has_collided=False) -> None:
+    def __init__(self, s_x=sc.STRIKER_START_X, s_y=sc.PLAYER_STRIKER_START_Y, p_x=sc.WINDOW_WIDTH / 2,
+                 p_y=sc.WINDOW_HEIGHT / 2, p_velocity=Vec2d(0.0, 0.0), has_collided=False) -> None:
         self.s_x = s_x
         self.s_y = s_y
         self.p_x = p_x

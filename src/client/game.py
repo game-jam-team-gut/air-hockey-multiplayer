@@ -39,10 +39,8 @@ class Game:
         return player_score, enemy_score, time
 
     def init_strikers(self):
-        player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
-                                 sc.WINDOW_HEIGHT - self.asset_manager.striker_img.get_height() / 2)
-        enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
-                                self.asset_manager.striker_img.get_height() / 2)
+        player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), sc.PLAYER_STRIKER_START_Y)
+        enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), sc.ENEMY_STRIKER_START_Y)
         return player_striker, enemy_striker
 
     def draw(self, window):
@@ -70,8 +68,6 @@ class Game:
 
         self.player_striker.check_player_input(player_input, self.board.rect)
         self.player_striker.synchronise_pos()
-
-        self.enemy_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)
         if self.player_striker.is_primary_sync:
