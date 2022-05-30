@@ -5,8 +5,8 @@ import pymunk.pygame_util
 import shared.config as sc
 from client.asset_manager import AssetManager
 from client.board import Board
-from client.score import Score
-from client.time import Time
+from client.scoreboard import Scoreboard
+from client.timeboard import Timeboard
 from client.striker import Striker
 from client.puck import Puck
 
@@ -20,7 +20,7 @@ class Game:
         self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img), self.space)
         self.space.add(*self.board.walls)
 
-        self.player_score, self.enemy_score, self.time = self.init_user_interface()
+        self.player_scoreboard, self.enemy_scoreboard, self.timeboard = self.init_user_interface()
 
         self.player_striker, self.enemy_striker = self.init_strikers()
         self.space.add(self.player_striker.body, self.player_striker.shape)
@@ -31,12 +31,12 @@ class Game:
 
     def init_user_interface(self):
         scaled_ui_bg_big_img = self.asset_manager.scale_img(self.asset_manager.result_bg_big_img)
-        player_score = Score(scaled_ui_bg_big_img, sc.WINDOW_WIDTH - scaled_ui_bg_big_img.get_width() / 2,
+        player_scoreboard = Scoreboard(scaled_ui_bg_big_img, sc.WINDOW_WIDTH - scaled_ui_bg_big_img.get_width() / 2,
                              sc.WINDOW_HEIGHT - scaled_ui_bg_big_img.get_height() / 2)
-        enemy_score = Score(scaled_ui_bg_big_img, sc.WINDOW_WIDTH - scaled_ui_bg_big_img.get_width() / 2,
+        enemy_scoreboard = Scoreboard(scaled_ui_bg_big_img, sc.WINDOW_WIDTH - scaled_ui_bg_big_img.get_width() / 2,
                             scaled_ui_bg_big_img.get_height() / 2)
-        time = Time(scaled_ui_bg_big_img, scaled_ui_bg_big_img.get_width() / 2, sc.WINDOW_HEIGHT / 2)
-        return player_score, enemy_score, time
+        timeboard = Timeboard(scaled_ui_bg_big_img, scaled_ui_bg_big_img.get_width() / 2, sc.WINDOW_HEIGHT / 2)
+        return player_scoreboard, enemy_scoreboard, timeboard
 
     def init_strikers(self):
         player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), sc.PLAYER_STRIKER_START_Y)
@@ -47,9 +47,9 @@ class Game:
         window.fill((255, 255, 255))
         group = pygame.sprite.RenderPlain()
         group.add(self.board)
-        group.add(self.player_score)
-        group.add(self.enemy_score)
-        group.add(self.time)
+        group.add(self.player_scoreboard)
+        group.add(self.enemy_scoreboard)
+        group.add(self.timeboard)
         group.add(self.player_striker)
         group.add(self.enemy_striker)
         group.add(self.puck)
@@ -70,5 +70,6 @@ class Game:
         self.player_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)
+        self.puck.check_goal(self.player_scoreboard)
         if self.player_striker.is_primary_sync:
             self.puck.synchronise_pos()

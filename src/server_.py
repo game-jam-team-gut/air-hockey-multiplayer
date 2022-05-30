@@ -44,7 +44,7 @@ class Server:
     def handle_client(self, addr, data):
         client_id = self.connected_addresses.index(addr)
         self.players[client_id] = data
-        if self.players[client_id - 1].has_collided:
+        if self.players[client_id - 1].is_primary_sync:
             self.primary_sync_player_id = client_id
         if self.primary_sync_player_id == client_id:
             self.socket.sendto(pickle.dumps(self.players[client_id - 1].primary_map_to_enemy_side()), addr)
