@@ -8,8 +8,8 @@ PACKET_SEND_REPEAT_COUNT = 2
 WINDOW_WIDTH = 960
 WINDOW_HEIGHT = WINDOW_WIDTH
 
-# TODO remove magic number 1595 (stands for board.png height)
-SCALE = WINDOW_HEIGHT / 1595
+# TODO remove magic number 1596 (stands for board.png height)
+SCALE = WINDOW_HEIGHT / 1596
 
 # TODO remove magic number 60
 STRIKER_START_X = WINDOW_WIDTH / 2
