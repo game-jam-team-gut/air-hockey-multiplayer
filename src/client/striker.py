@@ -26,20 +26,20 @@ class Striker(PhysicsGameObject):
         if p_movement_area.contains(m_rect):
             self.set_position(m_pos)
         else:
-            new_x, new_y = self.body.position
             if m_rect.x + m_rect.width > p_movement_area.x + p_movement_area.width:
-                new_x = p_movement_area.x + p_movement_area.width - m_rect.width / 2
+                self.set_position(
+                    (p_movement_area.x + p_movement_area.width - m_rect.width / 2, self.get_position()[1]))
             elif m_rect.x < p_movement_area.x:
-                new_x = p_movement_area.x + m_rect.width / 2
+                self.set_position((p_movement_area.x + m_rect.width / 2, self.get_position()[1]))
             else:
-                new_x = m_rect.x + m_rect.width / 2
+                self.set_position((m_rect.x + m_rect.width / 2, self.get_position()[1]))
             if m_rect.y < p_movement_area.y:
-                new_y = p_movement_area.y + self.rect.height / 2
+                self.set_position((self.get_position()[0], p_movement_area.y + self.rect.height / 2))
             elif m_rect.y + m_rect.height > p_movement_area.y + p_movement_area.height:
-                new_y = p_movement_area.y + p_movement_area.height - m_rect.height / 2
+                self.set_position((self.get_position()[0],
+                                  p_movement_area.y + p_movement_area.height - m_rect.height / 2))
             else:
-                new_y = m_rect.y + m_rect.height / 2
-            self.body.position = new_x, new_y
+                self.set_position((self.get_position()[0], m_rect.y + m_rect.height / 2))
 
     def check_player_input(self, p_input, p_movement_area):
         old_pos = self.get_position()
