@@ -5,6 +5,7 @@ import pymunk.pygame_util
 import shared.config as sc
 from client.asset_manager import AssetManager
 from client.board import Board
+from client.play_area import PlayArea
 from client.scoreboard import Scoreboard
 from client.timeboard import Timeboard
 from client.striker import Striker
@@ -17,8 +18,10 @@ class Game:
 
         self.asset_manager = AssetManager()
 
-        self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img), self.space)
-        self.space.add(*self.board.walls)
+        self.board = Board(self.asset_manager.scale_img(self.asset_manager.board_img))
+
+        self.play_area = PlayArea(self.asset_manager.scale_img(self.asset_manager.play_area_img), self.space)
+        self.space.add(*self.play_area.walls)
 
         self.player_scoreboard, self.enemy_scoreboard, self.timeboard = self.init_user_interface()
 
@@ -32,14 +35,15 @@ class Game:
     def init_user_interface(self):
         scaled_ui_bg_big_img = self.asset_manager.scale_img(self.asset_manager.result_bg_big_img)
         player_scoreboard = Scoreboard(scaled_ui_bg_big_img, sc.WINDOW_WIDTH - scaled_ui_bg_big_img.get_width() / 2,
-                             sc.WINDOW_HEIGHT - scaled_ui_bg_big_img.get_height() / 2)
+                                       sc.WINDOW_HEIGHT - scaled_ui_bg_big_img.get_height() / 2)
         enemy_scoreboard = Scoreboard(scaled_ui_bg_big_img, sc.WINDOW_WIDTH - scaled_ui_bg_big_img.get_width() / 2,
-                            scaled_ui_bg_big_img.get_height() / 2)
+                                      scaled_ui_bg_big_img.get_height() / 2)
         timeboard = Timeboard(scaled_ui_bg_big_img, scaled_ui_bg_big_img.get_width() / 2, sc.WINDOW_HEIGHT / 2)
         return player_scoreboard, enemy_scoreboard, timeboard
 
     def init_strikers(self):
-        player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), sc.PLAYER_STRIKER_START_Y)
+        player_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img),
+                                 sc.PLAYER_STRIKER_START_Y)
         enemy_striker = Striker(self.asset_manager.scale_img(self.asset_manager.striker_img), sc.ENEMY_STRIKER_START_Y)
         return player_striker, enemy_striker
 
@@ -66,7 +70,7 @@ class Game:
     def update(self, player_input):
         self.update_physics()
 
-        self.player_striker.check_player_input(player_input, self.board.player_striker_movement_area)
+        self.player_striker.check_player_input(player_input, self.play_area.player_movement_area)
         self.player_striker.synchronise_pos()
 
         self.puck.check_collision(self.player_striker)
