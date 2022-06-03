@@ -1,5 +1,6 @@
 import pygame
 from pymunk import Vec2d
+import math
 
 import shared.config as sc
 from client.physics_game_object import PhysicsGameObject
@@ -14,7 +15,11 @@ class Puck(PhysicsGameObject):
 
     def check_collision(self, collider):
         if pygame.sprite.collide_mask(collider, self):
-            self.body.apply_impulse_at_local_point(Vec2d.unit() * -5 * collider.velocity, (0, 0))
+            col_x, col_y = pygame.sprite.collide_mask(collider, self)
+            # TODO remove magic number 110
+            adj_x = -math.cos(col_x * math.pi / 110)
+            adj_y = -math.cos(col_y * math.pi / 110)
+            self.body.apply_impulse_at_local_point(Vec2d(adj_x, adj_y) * 5 * collider.velocity, (0, 0))
             self.rect.center = self.body.position
 
     def reset(self):
