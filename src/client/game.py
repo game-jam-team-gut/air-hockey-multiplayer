@@ -7,8 +7,6 @@ import shared.config as sc
 from client.asset_manager import AssetManager
 from client.board import Board
 from client.play_area import PlayArea
-from client.scoreboard import Scoreboard
-from client.timeboard import Timeboard
 from client.striker import Striker
 from client.puck import Puck
 
