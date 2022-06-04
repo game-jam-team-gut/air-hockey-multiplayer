@@ -35,7 +35,12 @@ class MenuScreen(Screen):
             return
         
         connection_handler = ConnectionHandler(self.ip_input.value, sc.SERVER_PORT)
-        if not connection_handler.can_connect():
+        can = connection_handler.can_connect()
+        if can == None:
+            start_new_thread(self.show_error, ("No server running on provided address.",))
+            return
+        
+        if can == False:
             start_new_thread(self.show_error, ("Server is full.",))
             return
 

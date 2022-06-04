@@ -15,7 +15,10 @@ class ConnectionHandler:
     
     def can_connect(self):
         self._send_message("can_i_connect")
-        return pickle.loads(self.socket.recv(sc.PACKET_SIZE))
+        try:
+            return pickle.loads(self.socket.recv(sc.PACKET_SIZE))
+        except:
+            return None
 
     def connect(self):
         self._send_message("connect")
