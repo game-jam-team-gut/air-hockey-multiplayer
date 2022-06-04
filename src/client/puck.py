@@ -25,7 +25,7 @@ class Puck(PhysicsGameObject):
         self.set_position((sc.WINDOW_WIDTH / 2, sc.WINDOW_HEIGHT / 2))
         self.body.velocity = Vec2d(0.0, 0.0)
 
-    def check_goal(self, player_scoreboard):
+    def check_goal(self, scores):
         if self.get_position()[1] <= 0:
-            player_scoreboard.points += 1
+            scores.player_score += 1
             self.reset()
