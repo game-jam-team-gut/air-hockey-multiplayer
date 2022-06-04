@@ -28,6 +28,8 @@ class MenuScreen(Screen):
         self.UI.register(self.error_label)
     
     def validate_ip(self):
+        if self.ip_input.value == "":
+            self.ip_input.value = "127.0.0.1"
         try:
             socket.inet_aton(self.ip_input.value)
         except:
