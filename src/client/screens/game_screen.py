@@ -10,11 +10,11 @@ import shared.config as sc
 
 
 class GameScreen(Screen):
-    def __init__(self, window, change_screen) -> None:
+    def __init__(self, window, change_screen, server_address, server_port) -> None:
         super().__init__(window, change_screen)
         self.game = Game()
         self.input = Input()
-        self.connection_handler = ConnectionHandler(sc.SERVER_ADDRESS, sc.SERVER_PORT)
+        self.connection_handler = ConnectionHandler(server_address, server_port)
         self.connection_handler.connect()
         start_new_thread(self.send_data, ())
         start_new_thread(self.receive_data, ())
