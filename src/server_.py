@@ -40,6 +40,12 @@ class Server:
         match pickle.loads(data):
             case "connect":
                 self.accept_connection(addr)
+            case "can_i_connect":
+                if len(self.connected_addresses) < 2:
+                    self.socket.sendto(pickle.dumps(True), addr)
+                else:
+                    self.socket.sendto(pickle.dumps(False), addr)
+
 
     def handle_client(self, addr, data):
         client_id = self.connected_addresses.index(addr)

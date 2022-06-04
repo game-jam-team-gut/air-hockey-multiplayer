@@ -1,6 +1,7 @@
 import socket
 import time
 from _thread import *
+from client.connection_handler import ConnectionHandler
 
 from client.screens.screen import Screen
 from client.screens.game_screen import GameScreen
@@ -19,25 +20,32 @@ class MenuScreen(Screen):
         self.input = Input()
         self.UI = UI(window, self.input)
         self.ip_input = TextInput(sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 4, sc.WINDOW_HEIGHT / 2 - 25, sc.WINDOW_WIDTH / 2, 50)
-        self.ip_error = Label("Wrong server address", sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 4, sc.WINDOW_HEIGHT / 2 - 100, ui_utils.RED)
-        self.ip_error.visible = False
+        self.error_label = Label("", sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 4, sc.WINDOW_HEIGHT / 2 - 100, ui_utils.RED)
+        self.error_label.visible = False
         self.UI.register(self.ip_input)
         self.UI.register(Button("Connect", sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 6, sc.WINDOW_HEIGHT / 2 + 50, sc.WINDOW_WIDTH / 3, 50,
                          self.validate_ip))
-        self.UI.register(self.ip_error)
+        self.UI.register(self.error_label)
     
     def validate_ip(self):
         try:
             socket.inet_aton(self.ip_input.value)
         except:
-            start_new_thread(self.show_wrong_ip_error, ())
+            start_new_thread(self.show_error, ("Wrong server address.",))
             return
+        
+        connection_handler = ConnectionHandler(self.ip_input.value, sc.SERVER_PORT)
+        if not connection_handler.can_connect():
+            start_new_thread(self.show_error, ("Server is full.",))
+            return
+
         self.change_screen(GameScreen(self.window, self.change_screen, self.ip_input.value, sc.SERVER_PORT))
     
-    def show_wrong_ip_error(self):
-        self.ip_error.visible = True
+    def show_error(self, error_text):
+        self.error_label.visible = True
+        self.error_label.text = error_text
         time.sleep(2)
-        self.ip_error.visible = False
+        self.error_label.visible = False
 
     def update(self, delta_time):
         self.window.fill(ui_utils.BLACK)

@@ -12,6 +12,10 @@ class ConnectionHandler:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.settimeout(c.REQUEST_TIMEOUT)
         self.id = None
+    
+    def can_connect(self):
+        self._send_message("can_i_connect")
+        return pickle.loads(self.socket.recv(sc.PACKET_SIZE))
 
     def connect(self):
         self._send_message("connect")
