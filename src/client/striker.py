@@ -6,7 +6,7 @@ import shared.config as sc
 from client.physics_game_object import PhysicsGameObject
 
 MASS = 100
-ELASTICITY = 1
+ELASTICITY = 0.999
 
 
 class Striker(PhysicsGameObject):

@@ -64,7 +64,7 @@ class Game:
         pygame.display.flip()
 
     def update_physics(self):
-        time_step = 0.02
+        time_step = 1 / 60
         self.space.step(time_step)
 
     def update(self, player_input):

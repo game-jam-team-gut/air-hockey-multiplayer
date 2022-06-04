@@ -6,7 +6,7 @@ import shared.config as sc
 from client.physics_game_object import PhysicsGameObject
 
 MASS = 1
-ELASTICITY = 1
+ELASTICITY = 0.999
 
 
 class Puck(PhysicsGameObject):
@@ -17,9 +17,8 @@ class Puck(PhysicsGameObject):
         if pygame.sprite.collide_mask(collider, self):
             col_x, col_y = pygame.sprite.collide_mask(collider, self)
             # TODO remove magic number 110
-            adj_x = -math.cos(col_x * math.pi / 110)
-            adj_y = -math.cos(col_y * math.pi / 110)
-            self.body.apply_impulse_at_local_point(Vec2d(adj_x, adj_y) * 5 * collider.velocity, (0, 0))
+            impulse = Vec2d(-math.cos(col_x * math.pi / 110), -math.cos(col_y * math.pi / 110))
+            self.body.apply_impulse_at_local_point(impulse * 5 * collider.velocity, (0, 0))
             self.rect.center = self.body.position
 
     def reset(self):
