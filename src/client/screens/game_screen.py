@@ -44,11 +44,13 @@ class GameScreen(Screen):
             s_x, s_y = self.game.player_striker.get_position()
             p_x, p_y = self.game.puck.get_position()
             p_velocity = self.game.puck.get_velocity()
-            points = self.game.scores.player_score
+            pl_score = self.game.scores.player_score
+            en_score = self.game.scores.enemy_score
             is_primary_sync = False
-            if pygame.sprite.collide_mask(self.game.player_striker, self.game.puck) or self.game.puck.get_position()[1] <= 0:
+            if pygame.sprite.collide_mask(self.game.player_striker, self.game.puck):
                 is_primary_sync = True
-            self.connection_handler.send_message(Player(s_x, s_y, p_x, p_y, p_velocity, points, is_primary_sync))
+            self.connection_handler.send_message(
+                Player(s_x, s_y, p_x, p_y, p_velocity, pl_score, en_score, is_primary_sync))
 
     def receive_data(self):
         while not self.input.quit:
@@ -60,8 +62,10 @@ class GameScreen(Screen):
                     self.game.puck.set_velocity(enemy.p_velocity)
                 if enemy.s_x is not None and enemy.s_y is not None:
                     self.game.enemy_striker.set_position((enemy.s_x, enemy.s_y))
-                if enemy.points is not None:
-                    self.game.scores.enemy_score = enemy.points
+                if enemy.pl_score is not None:
+                    self.game.scores.enemy_score = enemy.pl_score
+                if enemy.en_score is not None:
+                    self.game.scores.player_score = enemy.en_score
                 if enemy.is_primary_sync is not None:
                     self.game.player_striker.is_primary_sync = enemy.is_primary_sync
 

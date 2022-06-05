@@ -2,14 +2,14 @@ import pickle
 import socket
 
 import server.config as c
-import shared.config
+import shared.config as sc
 from shared.player import Player
 
 
 class Server:
     def __init__(self) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind(('0.0.0.0', shared.config.SERVER_PORT))
+        self.socket.bind(('0.0.0.0', sc.SERVER_PORT))
         self.players = [Player(), Player()]
         self.connected_addresses = []
         self.primary_sync_player_id = 1
@@ -26,7 +26,7 @@ class Server:
         print("Client disconnected " + str(addr))
 
     def loop(self):
-        data, addr = self.socket.recvfrom(shared.config.PACKET_SIZE)
+        data, addr = self.socket.recvfrom(sc.PACKET_SIZE)
         if addr in self.connected_addresses:  # already connected
             data = pickle.loads(data)
             match data:
@@ -46,7 +46,6 @@ class Server:
                 else:
                     self.socket.sendto(pickle.dumps(False), addr)
 
-
     def handle_client(self, addr, data):
         client_id = self.connected_addresses.index(addr)
         self.players[client_id] = data
@@ -60,6 +59,6 @@ class Server:
 
 if __name__ == "__main__":
     server = Server()
-    print("Starting UDP server on %s:%d" % shared.config.SERVER)
+    print("Starting UDP server on %s:%d" % sc.SERVER)
     while True:
         server.loop()

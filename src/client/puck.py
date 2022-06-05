@@ -29,3 +29,6 @@ class Puck(PhysicsGameObject):
         if self.get_position()[1] <= 0:
             scores.player_score += 1
             self.reset()
+        elif self.get_position()[1] >= sc.WINDOW_HEIGHT:
+            scores.enemy_score += 1
+            self.reset()
