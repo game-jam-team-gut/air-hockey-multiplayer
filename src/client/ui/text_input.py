@@ -4,8 +4,9 @@ from client.ui.ui_item import UIItem
 import client.ui.utils as utils
 
 class TextInput(UIItem):
-    def __init__(self, x, y, width, height) -> None:
+    def __init__(self, x, y, width, height, submit_handler) -> None:
         super().__init__()
+        self.handler = submit_handler
         self.value = ""
         self.rect = pygame.Rect(x, y, width, height)
         self.color = utils.WHITE , utils.GRAY
@@ -22,6 +23,8 @@ class TextInput(UIItem):
         if self.active:
             if input.backspace:
                 self.value = self.value[:-1]
+            elif input.enter:
+                self.handler()
             elif input.unicode != "":
                 self.value += input.unicode
             

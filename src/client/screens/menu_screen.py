@@ -19,8 +19,8 @@ class MenuScreen(Screen):
         super().__init__(window, change_screen)
         self.input = Input()
         self.UI = UI(window, self.input)
-        self.ip_input = TextInput(sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 4, sc.WINDOW_HEIGHT / 2 - 25, sc.WINDOW_WIDTH / 2, 50)
-        self.error_label = Label("", sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 4, sc.WINDOW_HEIGHT / 2 - 100, ui_utils.RED)
+        self.ip_input = TextInput(sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 4, sc.WINDOW_HEIGHT / 2 - 25, sc.WINDOW_WIDTH / 2, 50, self.validate_ip)
+        self.error_label = Label("", 10, sc.WINDOW_HEIGHT / 2 - 100, ui_utils.RED)
         self.error_label.visible = False
         self.UI.register(self.ip_input)
         self.UI.register(Button("Connect", sc.WINDOW_WIDTH / 2 - sc.WINDOW_WIDTH / 6, sc.WINDOW_HEIGHT / 2 + 50, sc.WINDOW_WIDTH / 3, 50,

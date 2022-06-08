@@ -9,6 +9,7 @@ class Input:
         self.dragging = False
         self.click = False
         self.backspace = False
+        self.enter = False
         self.unicode = ""
 
     def handle(self):
@@ -29,5 +30,7 @@ class Input:
                 case pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         self.backspace = True
+                    elif event.key == pygame.K_RETURN:
+                        self.enter = True
                     else:
                         self.unicode += event.unicode
